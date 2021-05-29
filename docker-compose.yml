@@ -1,10 +1,10 @@
 version: '2.2'
 services:
-  ES:
+  elasticsearch:
     build:
       context: ./
       dockerfile: ec.dockerfile
-    container_name: ES
+    container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -16,49 +16,49 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ESData1:/usr/share/elasticsearch/data
+      - esdata1:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
       - esnet
-  ES2:
+  elasticsearch2:
     build:
       context: ./
       dockerfile: ec.dockerfile
-    container_name: ES2
+    container_name: elasticsearch2
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - http.cors.enabled=true
       - http.cors.allow-origin=*
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=ES"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - ESData2:/usr/share/elasticsearch/data
+      - esdata2:/usr/share/elasticsearch/data
     networks:
       - esnet
-  ES3:
+  elasticsearch3:
     build:
       context: ./
       dockerfile: ec.dockerfile
-    container_name: ES3
+    container_name: elasticsearch3
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - http.cors.enabled=true
       - http.cors.allow-origin=*
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=ES"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - ESData3:/usr/share/elasticsearch/data
+      - esdata3:/usr/share/elasticsearch/data
     networks:
       - esnet
 
@@ -66,10 +66,10 @@ services:
     build:
       context: ./
       dockerfile: ec.dockerfile
-    container_name: KIBANA
+    container_name: kibana
     environment:
       SERVER_NAME: kibana.local
-      ELASTICSEARCH_URL: http://ES:9200
+      ELASTICSEARCH_URL: http://elasticsearch:9200
     ports:
       - '5601:5601'
     networks:
